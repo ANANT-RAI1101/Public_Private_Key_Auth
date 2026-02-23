@@ -1,21 +1,23 @@
 class CrudRepository {
     constructor(model) {
-        this.model=model
+        this.model = model
     }
 
     async create(data) {
         try {
             const response = await this.model.create(data);
+
             return response;
         } catch (error) {
-            throw error
+            console.log(error);
+
         }
     }
     async delete(userId) {
         try {
             const response = await this.model.destroy({
-                where:{
-                    userId:userId
+                where: {
+                    userId: userId
                 }
             });
             return response;
@@ -33,4 +35,4 @@ class CrudRepository {
     }
 }
 
-module.exports=CrudRepository
+module.exports = CrudRepository

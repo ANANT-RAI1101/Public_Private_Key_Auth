@@ -1,12 +1,12 @@
-const User =require("../models/user")
-const CrudRepository =require("./crud-repository")
+const { user } = require("../models")
+const CrudRepository = require("./crud-repository")
 
 
-class UserRepository extends CrudRepository{
-    constructor(){
-        super(User)
+class UserRepository extends CrudRepository {
+    constructor() {
+        super(user)
     }
-    
+
 }
 
-module.exports=UserRepository
+module.exports = UserRepository

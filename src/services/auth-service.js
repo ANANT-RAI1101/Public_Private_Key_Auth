@@ -1,8 +1,9 @@
 const crypto = require('crypto');
 const UserRepository = require("../repository/user-repository");
 const KeyRepository = require("../repository/key-repository")
-const JWT=require("jsonwebtoken")
-const { use } = require('react');
+const JWT = require("jsonwebtoken")
+
+const { JWT_KEY } = require('../config/serverConfig');
 
 class UserService {
     constructor() {
@@ -16,11 +17,14 @@ class UserService {
                 throw new Error("Algorithm is different");
             }
             const id = crypto.randomUUID();
+            console.log(id);
+
             const payload = {
                 userId: id,
                 username: data.username
             }
             const user = await this.userRepository.create(payload)
+            console.log(user);
 
             const keyId = crypto.randomUUID();
 
@@ -78,26 +82,28 @@ class UserService {
                 challenge,
                 publicKey,
                 signature,
-                
+
             )
             if (!isVerified) throw new Error("signature is not correct");
 
-            const sessionToken=this.createToken({userId:data.userId,username:data.username})
-            return{
-                userId:data.userId,
-                sessionToken:sessionToken
+            const sessionToken = this.createToken({ userId: data.userId, username: data.username })
+            return {
+                userId: data.userId,
+                sessionToken: sessionToken
             }
         } catch (error) {
             throw new error
         }
     }
 
-    async createToken(user){
+    async createToken(user) {
         try {
-            const sessionToken=JWT.sign(user,JWT_KEY,{"expiresIn":"2d"})
+            const sessionToken = JWT.sign(user, JWT_KEY, { "expiresIn": "2d" })
             return sessionToken
         } catch (error) {
-            
+
         }
     }
 }
+
+module.exports = UserService
